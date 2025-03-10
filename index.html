@@ -189,6 +189,7 @@
         }
 
         #qrcode {
+            /* background-color: white; */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -198,10 +199,11 @@
         }
 
         #qrcode canvas {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
+    border: 5px solid white;  /* Apply white border directly on the canvas */
+    border-radius: 16px; /* Optional: To match rounded corners */
+    background-color: transparent; /* Ensures the QR code background is clear */
+}
+
 
         .download-btn {
             display: inline-flex;
@@ -373,65 +375,97 @@
         };
 
         async function generateQRCode() {
-            const data = dataInput.value.trim();
-            const size = parseInt(sizeSelect.value);
-            // const errorCorrection =  errorCorrectionSelect.value;
-            const errorCorrection ="H";
-            // console.log(errorCorrection)
-            
-            // Hide previous messages
-            successMessage.classList.add("hidden");
-            errorMessage.classList.add("hidden");
-            
-            // Validate input
-            if (!data) {
-                errorMessage.textContent = "Please enter some data!";
-                errorMessage.classList.remove("hidden");
-                qrcodeElement.innerHTML = '';
-                downloadBtn.classList.add("hidden");
-                return;
-            }
-            
-            try {
-                // Clear the previous QR code
-                qrcodeElement.innerHTML = '';
+    const data = dataInput.value.trim();
+    const size = parseInt(sizeSelect.value);
+    const errorCorrection = "H";
 
-                // Create QR code options
-                const options = {
-                    text: data,
-                    width: size,
-                    height: size,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel[errorCorrection]
-                };
-                
-                // Create QR code
-                qrCode = new QRCode(qrcodeElement, options);
+    // Hide previous messages
+    successMessage.classList.add("hidden");
+    errorMessage.classList.add("hidden");
 
-                // Now wait until the canvas is available and the QR code has been fully rendered
-                const canvas = qrcodeElement.querySelector("canvas");
+    // Validate input
+    if (!data) {
+        errorMessage.textContent = "Please enter some data!";
+        errorMessage.classList.remove("hidden");
+        qrcodeElement.innerHTML = '';
+        downloadBtn.classList.add("hidden");
+        return;
+    }
 
-                if (canvas) {
-                    // Add the logo only after the QR code is fully rendered
-                    addLogoToQRCode(canvas);
-                    
-                    // Show download button
-                    downloadBtn.classList.remove("hidden");
-                    
-                    // Show success message
-                    successMessage.textContent = "QR code generated successfully!";
-                    successMessage.classList.remove("hidden");
-                } else {
-                    throw new Error("QR code canvas not found.");
-                }
-            } catch (error) {
-                errorMessage.textContent = `Error: ${error.message || "Failed to generate QR code"}`;
-                errorMessage.classList.remove("hidden");
-                downloadBtn.classList.add("hidden");
-                console.error(error);
-            }
+    try {
+        // Clear the previous QR code
+        qrcodeElement.innerHTML = '';  // Remove the previous QR code
+
+        // Create QR code options
+        const options = {
+            text: data,
+            width: size,
+            height: size,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel[errorCorrection]
+        };
+
+        // Create QR code
+        qrCode = new QRCode(qrcodeElement, options);
+
+        // Now wait until the canvas is available and the QR code has been fully rendered
+        const canvas = qrcodeElement.querySelector("canvas");
+
+        if (canvas) {
+            const ctx = canvas.getContext("2d");
+
+            // Step 1: Add logo to QR code
+            addLogoToQRCode(canvas, ctx, size);
+
+            // Step 2: Apply the white border to the canvas
+            const borderSize = 1; // Adjust this value to control the border size
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+
+            ctx.save();
+            ctx.lineWidth = borderSize;
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+            ctx.restore();
+
+            // Show the download button and success message
+            downloadBtn.classList.remove("hidden");
+            successMessage.textContent = "QR code generated successfully!";
+            successMessage.classList.remove("hidden");
+        } else {
+            throw new Error("QR code canvas not found.");
         }
+    } catch (error) {
+        errorMessage.textContent = `Error: ${error.message || "Failed to generate QR code"}`;
+        errorMessage.classList.remove("hidden");
+        downloadBtn.classList.add("hidden");
+        console.error(error);
+    }
+}
+
+// Function to add logo to QR code (centering it)
+function addLogoToQRCode(canvas, ctx, size) {
+    const logoSize = size * 0.3; // 30% of the QR code size
+    const logoX = (size - logoSize) / 2;
+    const logoY = (size - logoSize) / 2;
+
+    // Create an image element for the logo
+    const logoImage = new Image();
+    logoImage.src = './favicon.ico'; // Replace with your image path
+
+    // Ensure the logo is loaded before adding it to the canvas
+    logoImage.onload = function() {
+        // Draw the logo inside the center of the QR code
+        ctx.save(); // Save the current canvas state
+        ctx.beginPath();
+
+        // Draw logo (ensure it doesn't get clipped)
+        ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+        ctx.restore(); // Restore the canvas state after drawing the logo
+    };
+}
+
 
         // function addLogoToQRCode() {
         //     const canvas = qrcodeElement.querySelector("canvas");
