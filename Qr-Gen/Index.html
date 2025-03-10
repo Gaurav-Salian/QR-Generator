@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        input {
+            padding: 10px;
+            width: 300px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Code Generator</h1>
+
+    <label for="data">Enter Data:</label>
+    <input type="text" id="data" placeholder="Enter data for QR Code" />
+    <button onclick="generateQRCode()">Generate QR Code</button>
+
+    <div id="qrcode"></div>
+
+    <!-- Using qrcode-generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script>
+        function generateQRCode() {
+            const data = document.getElementById("data").value.trim(); // Get input data and remove spaces
+
+            // Check if data is empty
+            if (!data) {
+                alert("Please enter some data!");
+                return;
+            }
+
+            // Create QR code instance
+            const qr = qrcode(0, 'L');
+            qr.addData(data);
+            qr.make();
+
+            // Clear the previous QR code
+            document.getElementById("qrcode").innerHTML = '';
+
+            // Append the generated QR code to the div
+            const qrCanvas = qr.createImgTag();
+            document.getElementById("qrcode").innerHTML = qrCanvas;
+        }
+    </script>
+</body>
+</html>
