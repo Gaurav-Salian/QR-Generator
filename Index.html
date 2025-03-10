@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
     <style>
@@ -23,37 +24,107 @@
             box-sizing: border-box;
         }
 
+        /* .custom-spin {
+  position: absolute;
+  top: -8px; 
+  left: -8px; 
+  right: -8px; 
+  bottom: -8px;  
+  border-radius: 16px; 
+  animation: spin 2s linear infinite;
+  background: conic-gradient(from 90deg at 50% 50%, #E2CBFF 0%, #393BB2 50%, #E2CBFF 100%);
+  z-index: -1; 
+} */
+
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
+            background: linear-gradient(to right, #000022, #561675);
+            background-size: 200% 100%;
+            animation: gradientShift 10s ease infinite;
             min-height: 100vh;
+            display: flex;
             align-items: center;
             justify-content: center;
+            padding: 2rem;
+            color: #e0e0e0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(to bottom, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px),
+                repeating-linear-gradient(to right, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px);
+            pointer-events: none;
         }
 
         .container {
             max-width: 600px;
             width: 100%;
-            background-color: var(--card-bg);
+            background-color: rgba(0, 0, 34, 0.85);
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0 10px #3d005c, 0 0 20px #000022;
             padding: 2rem;
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            border: 1px solid #000022;
+            position: relative;
         }
+
+
+        /* .container {
+    max-width: 600px;
+    width: 100%;
+    background-color: rgba(0, 0, 34, 0.85);
+    border-radius: 16px;
+    box-shadow: 0 0 10px #3d005c, 0 0 20px #000022;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid #000022;
+    position: relative; 
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px; 
+    border: 5px solid transparent; 
+    background: conic-gradient(from 90deg at 50% 50%, #E2CBFF 0%, #393BB2 50%, #E2CBFF 100%);
+    animation: spin 2s linear infinite;
+    z-index: -1; 
+} */
+
+/* Spin animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
 
         h1 {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--text-color);
             text-align: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: inline;
         }
 
         .subtitle {
@@ -139,6 +210,9 @@
             cursor: pointer;
             margin-top: 1.5rem;
             background-color: var(--success-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
         }
 
         .download-btn:hover {
@@ -149,39 +223,18 @@
             display: none;
         }
 
-        .logo-settings {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-        }
-
-        .logo-size-slider {
+        .success-message, .error-message {
+            text-align: center;
+            font-size: 0.9rem;
             margin-top: 0.5rem;
-            width: 100%;
         }
 
         .success-message {
             color: var(--success-color);
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
         }
 
         .error-message {
             color: #ef4444;
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
         }
 
         /* Default logo preview */
@@ -214,10 +267,6 @@
             color: var(--text-secondary);
         }
 
-        h1{
-            display: inline;
-        }
-
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
             :root {
@@ -240,11 +289,24 @@
                 gap: 0.5rem;
             }
         }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+    
+
     </style>
 
 </head>
 <body>
     <div class="container">
+        <span class="custom-spin"></span>
         <h1>QR Code Generator</h1>
         <p class="subtitle">Branded QR codes</p>
 
@@ -359,16 +421,71 @@
             }
         }
 
-        function addLogoToQRCode(canvas) {
-            const ctx = canvas.getContext("2d");
-            const size = parseInt(sizeSelect.value);
-            const logoSize = size * 0.4; // 20% of the QR code size
-            const logoX = (size - logoSize) / 2;
-            const logoY = (size - logoSize) / 2;
-            
-            // Draw logo
-            ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-        }
+        // function addLogoToQRCode() {
+        //     const canvas = qrcodeElement.querySelector("canvas");
+        //     if (!canvas || !logoImage) return;
+    
+        //     const ctx = canvas.getContext("2d");
+        //     const size = parseInt(sizeSelect.value);
+        //     const logoSize = size * 0.3; // 30% of the QR code size
+        //     const logoX = (size - logoSize) / 2;
+        //     const logoY = (size - logoSize) / 2;
+    
+        //     // Create a rounded rectangle path for the logo's area
+        //     ctx.save();
+        //     ctx.beginPath();
+        //     // ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2, false);//circle
+        //     ctx.clip();  // Set the clipping region to the rounded area
+
+        //     // Draw the logo inside the rounded clip region
+        //     ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+        //     ctx.restore();  // Restore the original state of the canvas
+        // }
+
+
+        function addLogoToQRCode() {
+    const canvas = qrcodeElement.querySelector("canvas");
+    if (!canvas || !logoImage) return;
+    
+    const ctx = canvas.getContext("2d");
+    const size = parseInt(sizeSelect.value);
+    const logoSize = size * 0.35; // 20% of the QR code size
+    const logoX = (size - logoSize) / 2;
+    const logoY = (size - logoSize) / 2;
+
+    // Set shadow properties
+    ctx.shadowColor = 'rgba(0, 0, 0, 1)'; // Shadow color (black with opacity)
+    ctx.shadowBlur = 200; // Blur effect for the shadow
+    ctx.shadowOffsetX = 4; // Horizontal offset of the shadow
+    ctx.shadowOffsetY = 4; // Vertical offset of the shadow
+
+    // Draw a rounded rectangle for the logo area
+    const borderRadius = 12; // Change this value to adjust the roundness
+
+    ctx.save(); // Save the current state
+
+    // Rounded rectangle path
+    ctx.beginPath();
+    ctx.moveTo(logoX + borderRadius, logoY); // Start at top-left corner with rounded edge
+    ctx.lineTo(logoX + logoSize - borderRadius, logoY); // Top-right
+    ctx.arcTo(logoX + logoSize, logoY, logoX + logoSize, logoY + logoSize, borderRadius); // Top-right corner
+    ctx.lineTo(logoX + logoSize, logoY + logoSize - borderRadius); // Bottom-right
+    ctx.arcTo(logoX + logoSize, logoY + logoSize, logoX + logoSize - borderRadius, logoY + logoSize, borderRadius); // Bottom-right corner
+    ctx.lineTo(logoX + borderRadius, logoY + logoSize); // Bottom-left
+    ctx.arcTo(logoX, logoY + logoSize, logoX, logoY + logoSize - borderRadius, borderRadius); // Bottom-left corner
+    ctx.lineTo(logoX, logoY + borderRadius); // Top-left
+    ctx.arcTo(logoX, logoY, logoX + borderRadius, logoY, borderRadius); // Top-left corner
+    ctx.closePath();
+    
+    // Clip to the rounded rectangle area
+    ctx.clip();
+
+    // Draw the logo inside the rounded rectangle area
+    ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+    
+    ctx.restore(); // Restore the original state of the canvas
+}
+
 
         function downloadQRCode() {
             const canvas = qrcodeElement.querySelector("canvas");
