@@ -5,66 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        input {
-            padding: 10px;
-            width: 300px;
-            margin-top: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        #qrcode {
-            margin-top: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
+        /* Your existing styles */
     </style>
 </head>
 <body>
-    <h1>QR Code Generator</h1>
+    <div class="container">
+        <h1>QR Code Generator</h1>
+        <p class="subtitle">Branded QR codes</p>
 
-    <label for="data">Enter Data:</label>
-    <input type="text" id="data" placeholder="Enter data for QR Code" />
-    <button onclick="generateQRCode()">Generate QR Code</button>
+        <div class="input-group">
+            <label for="data">Enter URL or Text:</label>
+            <input type="text" id="data" placeholder="https://glizch.in or any text" />
+        </div>
 
-    <div id="qrcode"></div>
+        <div class="option-row">
+            <div class="option-col">
+                <label for="size">Size:</label>
+                <select id="size">
+                    <option value="150">Small (150×150)</option>
+                    <option value="250" selected>Medium (250×250)</option>
+                    <option value="350">Large (350×350)</option>
+                </select>
+            </div>
+            <div class="option-col">
+                <label for="errorCorrectionLevel">Error Correction:</label>
+                <select id="errorCorrectionLevel">
+                    <option value="L">Low (7%)</option>
+                    <option value="M">Medium (15%)</option>
+                    <option value="Q" selected>Quartile (25%)</option>
+                    <option value="H">High (30%)</option>
+                </select>
+            </div>
+        </div>
 
-    <!-- Using qrcode-generator -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+        <button onclick="generateQRCode()">Generate QR Code</button>
+
+        <div id="qrcode"></div>
+        <p id="errorMessage" class="error-message hidden"></p>
+
+        <button id="downloadBtn" class="download-btn hidden" onclick="downloadQRCode()">
+            Download QR Code
+        </button>
+        <p id="successMessage" class="success-message hidden"></p>
+    </div>
+
+    <!-- QRCode.js for better logo support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        function generateQRCode() {
-            const data = document.getElementById("data").value.trim(); // Get input data and remove spaces
+        // Reference to elements
+        const qrcodeElement = document.getElementById("qrcode");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const successMessage = document.getElementById("successMessage");
+        const errorMessage = document.getElementById("errorMessage");
+        const dataInput = document.getElementById("data");
+        const sizeSelect = document.getElementById("size");
+        const errorCorrectionSelect = document.getElementById("errorCorrectionLevel");
 
-            // Check if data is empty
+        // Store the QR code instance
+        let qrCode = null;
+
+        // Your logo image (static image)
+        const logoImage = new Image();
+        logoImage.src = './favicon.ico'; // Replace with your image path
+
+        // Ensure the logo is fully loaded before generating the QR code
+        logoImage.onload = function() {
+            console.log("Logo loaded");
+        };
+
+        async function generateQRCode() {
+            const data = dataInput.value.trim();
+            const size = parseInt(sizeSelect.value);
+            const errorCorrection = errorCorrectionSelect.value;
+            
+            // Hide previous messages
+            successMessage.classList.add("hidden");
+            errorMessage.classList.add("hidden");
+            
+            // Validate input
             if (!data) {
-                alert("Please enter some data!");
+                errorMessage.textContent = "Please enter some data!";
+                errorMessage.classList.remove("hidden");
+                qrcodeElement.innerHTML = '';
+                downloadBtn.classList.add("hidden");
                 return;
             }
+            
+            try {
+                // Clear the previous QR code
+                qrcodeElement.innerHTML = '';
 
-            // Create QR code instance
-            const qr = qrcode(0, 'L');
-            qr.addData(data);
-            qr.make();
-
-            // Clear the previous QR code
-            document.getElementById("qrcode").innerHTML = '';
-
-            // Append the generated QR code to the div
-            const qrCanvas = qr.createImgTag();
-            document.getElementById("qrcode").innerHTML = qrCanvas;
+                // Create QR code options
+                const options = {
+                    text: data,
+                    width: size,
+                    height: size,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel[errorCorrection]
+                };
+                
+                // Create QR code
+                qrCode = new QRCode(qrcodeElement, options);
+                
+                // Wait for QR code to render then add logo
+                setTimeout(() => {
+                    addLogoToQRCode();
+                    
+                    // Show download button
+                    downloadBtn.classList.remove("hidden");
+                    
+                    // Show success message
+                    successMessage.textContent = "QR code generated successfully!";
+                    successMessage.classList.remove("hidden");
+                }, 100);
+            } catch (error) {
+                errorMessage.textContent = `Error: ${error.message || "Failed to generate QR code"}`;
+                errorMessage.classList.remove("hidden");
+                downloadBtn.classList.add("hidden");
+                console.error(error);
+            }
         }
+
+        function addLogoToQRCode() {
+            const canvas = qrcodeElement.querySelector("canvas");
+            if (!canvas || !logoImage) return;
+            
+            const ctx = canvas.getContext("2d");
+            const size = parseInt(sizeSelect.value);
+            const logoSize = size * 0.2; // 20% of the QR code size
+            const logoX = (size - logoSize) / 2;
+            const logoY = (size - logoSize) / 2;
+            
+            // Draw logo
+            ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+        }
+
+        function downloadQRCode() {
+            const canvas = qrcodeElement.querySelector("canvas");
+            if (!canvas) return;
+            
+            try {
+                // Create a temporary link for downloading
+                const link = document.createElement("a");
+                link.download = "qrcode-with-logo.png";
+                
+                // Get data URL from canvas
+                const dataUrl = canvas.toDataURL("image/png");
+                link.href = dataUrl;
+                
+                // Trigger download
+                link.click();
+                
+                // Show success message
+                successMessage.textContent = "QR code downloaded!";
+                successMessage.classList.remove("hidden");
+            } catch (error) {
+                errorMessage.textContent = `Error downloading: ${error.message || "Failed to download QR code"}`;
+                errorMessage.classList.remove("hidden");
+                console.error(error);
+            }
+        }
+
+        // Initialize with a sample QR code
+        window.onload = function() {
+            dataInput.value = "https://Glizch.in";
+            generateQRCode();
+        };
     </script>
 </body>
 </html>
