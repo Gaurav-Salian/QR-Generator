@@ -2,11 +2,246 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
     <style>
-        /* Your existing styles */
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        input, select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .option-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .option-col {
+            flex: 1;
+        }
+
+        #qrcode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            min-height: 200px;
+        }
+
+        #qrcode canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            background-color: var(--success-color);
+        }
+
+        .download-btn:hover {
+            background-color: #0ca678;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .logo-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .logo-size-slider {
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            color: #ef4444;
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Default logo preview */
+        .default-logo {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-preview {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .logo-preview img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .logo-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        h1{
+            display: inline;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --card-bg: #1f2937;
+                --text-color: #f9fafb;
+                --text-secondary: #d1d5db;
+                --border-color: #374151;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .option-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
     </style>
+
 </head>
 <body>
     <div class="container">
@@ -27,17 +262,9 @@
                     <option value="350">Large (350×350)</option>
                 </select>
             </div>
-            <div class="option-col">
-                <label for="errorCorrectionLevel">Error Correction:</label>
-                <select id="errorCorrectionLevel">
-                    <option value="L">Low (7%)</option>
-                    <option value="M">Medium (15%)</option>
-                    <option value="Q" selected>Quartile (25%)</option>
-                    <option value="H">High (30%)</option>
-                </select>
-            </div>
+            
         </div>
-
+        <center><b>Error Correction By default is Set to  <h1> 30% </h1></b></center>
         <button onclick="generateQRCode()">Generate QR Code</button>
 
         <div id="qrcode"></div>
@@ -76,7 +303,7 @@
         async function generateQRCode() {
             const data = dataInput.value.trim();
             const size = parseInt(sizeSelect.value);
-            const errorCorrection = errorCorrectionSelect.value;
+            const errorCorrection = "H";
             
             // Hide previous messages
             successMessage.classList.add("hidden");
@@ -107,10 +334,13 @@
                 
                 // Create QR code
                 qrCode = new QRCode(qrcodeElement, options);
-                
-                // Wait for QR code to render then add logo
-                setTimeout(() => {
-                    addLogoToQRCode();
+
+                // Now wait until the canvas is available and the QR code has been fully rendered
+                const canvas = qrcodeElement.querySelector("canvas");
+
+                if (canvas) {
+                    // Add the logo only after the QR code is fully rendered
+                    addLogoToQRCode(canvas);
                     
                     // Show download button
                     downloadBtn.classList.remove("hidden");
@@ -118,7 +348,9 @@
                     // Show success message
                     successMessage.textContent = "QR code generated successfully!";
                     successMessage.classList.remove("hidden");
-                }, 100);
+                } else {
+                    throw new Error("QR code canvas not found.");
+                }
             } catch (error) {
                 errorMessage.textContent = `Error: ${error.message || "Failed to generate QR code"}`;
                 errorMessage.classList.remove("hidden");
@@ -127,13 +359,10 @@
             }
         }
 
-        function addLogoToQRCode() {
-            const canvas = qrcodeElement.querySelector("canvas");
-            if (!canvas || !logoImage) return;
-            
+        function addLogoToQRCode(canvas) {
             const ctx = canvas.getContext("2d");
             const size = parseInt(sizeSelect.value);
-            const logoSize = size * 0.2; // 20% of the QR code size
+            const logoSize = size * 0.4; // 20% of the QR code size
             const logoX = (size - logoSize) / 2;
             const logoY = (size - logoSize) / 2;
             
