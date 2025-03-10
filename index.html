@@ -18,25 +18,11 @@
             --success-color: #10b981;
         }
 
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        /* .custom-spin {
-  position: absolute;
-  top: -8px; 
-  left: -8px; 
-  right: -8px; 
-  bottom: -8px;  
-  border-radius: 16px; 
-  animation: spin 2s linear infinite;
-  background: conic-gradient(from 90deg at 50% 50%, #E2CBFF 0%, #393BB2 50%, #E2CBFF 100%);
-  z-index: -1; 
-} */
-
 
         body {
             background: linear-gradient(to right, #000022, #561675);
@@ -49,19 +35,6 @@
             padding: 2rem;
             color: #e0e0e0;
             position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                repeating-linear-gradient(to bottom, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px),
-                repeating-linear-gradient(to right, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px);
-            pointer-events: none;
         }
 
         .container {
@@ -78,54 +51,12 @@
             position: relative;
         }
 
-
-        /* .container {
-    max-width: 600px;
-    width: 100%;
-    background-color: rgba(0, 0, 34, 0.85);
-    border-radius: 16px;
-    box-shadow: 0 0 10px #3d005c, 0 0 20px #000022;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    border: 1px solid #000022;
-    position: relative; 
-}
-
-.container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px; 
-    border: 5px solid transparent; 
-    background: conic-gradient(from 90deg at 50% 50%, #E2CBFF 0%, #393BB2 50%, #E2CBFF 100%);
-    animation: spin 2s linear infinite;
-    z-index: -1; 
-} */
-
-/* Spin animation */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-
         h1 {
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--text-color);
             text-align: center;
             margin-bottom: 1rem;
-            display: inline;
         }
 
         .subtitle {
@@ -178,16 +109,6 @@
             background-color: var(--primary-hover);
         }
 
-        .option-row {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .option-col {
-            flex: 1;
-        }
-
         #qrcode {
             display: flex;
             flex-direction: column;
@@ -238,76 +159,10 @@
             color: #ef4444;
         }
 
-        /* Default logo preview */
-        .default-logo {
-            margin-top: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-preview {
-            width: 50px;
-            height: 50px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background-color: #ffffff;
-        }
-
-        .logo-preview img {
-            max-width: 80%;
-            max-height: 80%;
-        }
-
-        .logo-info {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #111827;
-                --card-bg: #1f2937;
-                --text-color: #f9fafb;
-                --text-secondary: #d1d5db;
-                --border-color: #374151;
-            }
-        }
-
-        /* Responsive design */
-        @media (max-width: 640px) {
-            .container {
-                padding: 1.5rem;
-            }
-
-            .option-row {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-    
-
     </style>
-
 </head>
 <body>
     <div class="container">
-        <span class="custom-spin"></span>
         <h1>QR Code Generator</h1>
         <p class="subtitle">Branded QR codes</p>
 
@@ -325,9 +180,9 @@
                     <option value="350">Large (350×350)</option>
                 </select>
             </div>
-            
         </div>
-        <center><b>Error Correction By default is Set to  <h1> 30% </h1></b></center>
+
+        <center><b>Error Correction By default is Set to 30%</b></center>
         <button onclick="generateQRCode()">Generate QR Code</button>
 
         <div id="qrcode"></div>
@@ -339,26 +194,20 @@
         <p id="successMessage" class="success-message hidden"></p>
     </div>
 
-    <!-- QRCode.js for better logo support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // Reference to elements
         const qrcodeElement = document.getElementById("qrcode");
         const downloadBtn = document.getElementById("downloadBtn");
         const successMessage = document.getElementById("successMessage");
         const errorMessage = document.getElementById("errorMessage");
         const dataInput = document.getElementById("data");
         const sizeSelect = document.getElementById("size");
-        const errorCorrectionSelect = document.getElementById("errorCorrectionLevel");
 
-        // Store the QR code instance
         let qrCode = null;
 
-        // Your logo image (static image)
         const logoImage = new Image();
-        logoImage.src = './favicon.ico'; // Replace with your image path
+        logoImage.src = './favicon.ico'; // Replace with your logo path
 
-        // Ensure the logo is fully loaded before generating the QR code
         logoImage.onload = function() {
             console.log("Logo loaded");
         };
@@ -367,12 +216,10 @@
             const data = dataInput.value.trim();
             const size = parseInt(sizeSelect.value);
             const errorCorrection = "H";
-            
-            // Hide previous messages
+
             successMessage.classList.add("hidden");
             errorMessage.classList.add("hidden");
-            
-            // Validate input
+
             if (!data) {
                 errorMessage.textContent = "Please enter some data!";
                 errorMessage.classList.remove("hidden");
@@ -380,55 +227,45 @@
                 downloadBtn.classList.add("hidden");
                 return;
             }
-            
+
             try {
-                // Clear the previous QR code
                 qrcodeElement.innerHTML = '';
 
-             // Create QR code options
-const options = {
-    text: data,
-    width: size,
-    height: size,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel[errorCorrection]
-};
+                const options = {
+                    text: data,
+                    width: size,
+                    height: size,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel[errorCorrection]
+                };
 
-// Create QR code
-qrCode = new QRCode(qrcodeElement, options);
+                qrCode = new QRCode(qrcodeElement, options);
 
-// Now wait until the canvas is available and the QR code has been fully rendered
-const canvas = qrcodeElement.querySelector("canvas");
+                const canvas = qrcodeElement.querySelector("canvas");
 
-if (canvas) {
-    // Add a white border around the QR code
-    const ctx = canvas.getContext("2d");
-    const borderSize = 10;  // Set the size of the border
-    const originalWidth = canvas.width;
-    const originalHeight = canvas.height;
-    
-    // Resize the canvas to make room for the border
-    canvas.width = originalWidth + borderSize * 2;
-    canvas.height = originalHeight + borderSize * 2;
+                if (canvas) {
+                    const ctx = canvas.getContext("2d");
+                    const borderSize = 10;
+                    const originalWidth = canvas.width;
+                    const originalHeight = canvas.height;
 
-    // Redraw the QR code in the center with a white border around it
-    ctx.fillStyle = "#ffffff";  // White border color
-    ctx.fillRect(0, 0, canvas.width, canvas.height);  // Fill the entire canvas with the border color
-    ctx.drawImage(canvas, borderSize, borderSize);  // Draw the original QR code in the center
-    
-    // Add the logo if applicable
-    addLogoToQRCode(canvas);
+                    canvas.width = originalWidth + borderSize * 2;
+                    canvas.height = originalHeight + borderSize * 2;
 
-    // Show download button
-    downloadBtn.classList.remove("hidden");
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(canvas, borderSize, borderSize);
 
-    // Show success message
-    successMessage.textContent = "QR code generated successfully!";
-    successMessage.classList.remove("hidden");
-} else {
-    throw new Error("QR code canvas not found.");
-}
+                    addLogoToQRCode(canvas);
+
+                    downloadBtn.classList.remove("hidden");
+
+                    successMessage.textContent = "QR code generated successfully!";
+                    successMessage.classList.remove("hidden");
+                } else {
+                    throw new Error("QR code canvas not found.");
+                }
 
             } catch (error) {
                 errorMessage.textContent = `Error: ${error.message || "Failed to generate QR code"}`;
@@ -438,89 +275,35 @@ if (canvas) {
             }
         }
 
-        // function addLogoToQRCode() {
-        //     const canvas = qrcodeElement.querySelector("canvas");
-        //     if (!canvas || !logoImage) return;
-    
-        //     const ctx = canvas.getContext("2d");
-        //     const size = parseInt(sizeSelect.value);
-        //     const logoSize = size * 0.3; // 30% of the QR code size
-        //     const logoX = (size - logoSize) / 2;
-        //     const logoY = (size - logoSize) / 2;
-    
-        //     // Create a rounded rectangle path for the logo's area
-        //     ctx.save();
-        //     ctx.beginPath();
-        //     // ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2, false);//circle
-        //     ctx.clip();  // Set the clipping region to the rounded area
+        function addLogoToQRCode(canvas) {
+            if (!canvas || !logoImage) return;
 
-        //     // Draw the logo inside the rounded clip region
-        //     ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-        //     ctx.restore();  // Restore the original state of the canvas
-        // }
+            const ctx = canvas.getContext("2d");
+            const size = parseInt(sizeSelect.value);
+            const logoSize = size * 0.2;
+            const logoX = (size - logoSize) / 2;
+            const logoY = (size - logoSize) / 2;
 
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2, false);
+            ctx.clip();
 
-        function addLogoToQRCode() {
-    const canvas = qrcodeElement.querySelector("canvas");
-    if (!canvas || !logoImage) return;
-    
-    const ctx = canvas.getContext("2d");
-    const size = parseInt(sizeSelect.value);
-    const logoSize = size * 0.2; // 20% of the QR code size
-    const logoX = (size - logoSize) / 2;
-    const logoY = (size - logoSize) / 2;
-
-    // Set shadow properties
-    ctx.shadowColor = 'rgba(0, 0, 0, 1)'; // Shadow color (black with opacity)
-    ctx.shadowBlur = 200; // Blur effect for the shadow
-    ctx.shadowOffsetX = 4; // Horizontal offset of the shadow
-    ctx.shadowOffsetY = 4; // Vertical offset of the shadow
-
-    // Draw a rounded rectangle for the logo area
-    const borderRadius = 12; // Change this value to adjust the roundness
-
-    ctx.save(); // Save the current state
-
-    // Rounded rectangle path
-    ctx.beginPath();
-    ctx.moveTo(logoX + borderRadius, logoY); // Start at top-left corner with rounded edge
-    ctx.lineTo(logoX + logoSize - borderRadius, logoY); // Top-right
-    ctx.arcTo(logoX + logoSize, logoY, logoX + logoSize, logoY + logoSize, borderRadius); // Top-right corner
-    ctx.lineTo(logoX + logoSize, logoY + logoSize - borderRadius); // Bottom-right
-    ctx.arcTo(logoX + logoSize, logoY + logoSize, logoX + logoSize - borderRadius, logoY + logoSize, borderRadius); // Bottom-right corner
-    ctx.lineTo(logoX + borderRadius, logoY + logoSize); // Bottom-left
-    ctx.arcTo(logoX, logoY + logoSize, logoX, logoY + logoSize - borderRadius, borderRadius); // Bottom-left corner
-    ctx.lineTo(logoX, logoY + borderRadius); // Top-left
-    ctx.arcTo(logoX, logoY, logoX + borderRadius, logoY, borderRadius); // Top-left corner
-    ctx.closePath();
-    
-    // Clip to the rounded rectangle area
-    ctx.clip();
-
-    // Draw the logo inside the rounded rectangle area
-    ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-    
-    ctx.restore(); // Restore the original state of the canvas
-}
-
+            ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+            ctx.restore();
+        }
 
         function downloadQRCode() {
             const canvas = qrcodeElement.querySelector("canvas");
             if (!canvas) return;
-            
+
             try {
-                // Create a temporary link for downloading
                 const link = document.createElement("a");
                 link.download = "qrcode-with-logo.png";
-                
-                // Get data URL from canvas
                 const dataUrl = canvas.toDataURL("image/png");
                 link.href = dataUrl;
-                
-                // Trigger download
                 link.click();
-                
-                // Show success message
+
                 successMessage.textContent = "QR code downloaded!";
                 successMessage.classList.remove("hidden");
             } catch (error) {
@@ -530,7 +313,6 @@ if (canvas) {
             }
         }
 
-        // Initialize with a sample QR code
         window.onload = function() {
             dataInput.value = "https://Glizch.in";
             generateQRCode();
