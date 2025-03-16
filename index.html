@@ -2,389 +2,659 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="icon" href="./Qr-Gen/favicon.ico" type="image/x-icon">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.0/gsap.min.js"></script>
-        <title>QR Code Generator</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
     <style>
-        /* General Styles */
-:root {
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
-  --bg-color: #f9fafb;
-  --card-bg: #ffffff;
-  --text-color: #1f2937;
-  --text-secondary: #6b7280;
-  --border-color: #e5e7eb;
-  --success-color: #10b981;
-}
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+        body {
+            background: linear-gradient(to right, #000022, #561675);
+            background-size: 200% 100%;
+            animation: gradientShift 10s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            /* align-items: center; */
+            justify-content: center;
+            padding: 2rem;
+            color: #e0e0e0;
+            position: relative;
+        }
 
-body {
-  justify-content: center;
-  color: #fff;
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-}
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(to bottom, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px),
+                repeating-linear-gradient(to right, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px);
+            pointer-events: none;
+        }
 
-.cover {
-  padding: 0 1.5rem;
-}
+        .container {
+            max-width: 600px;
+            width: 100%;
+            perspective: 1000px;
+        }
 
-.cover .btn-lg {
-  padding: .75rem 1.25rem;
-  font-weight: 700;
-}
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
 
-.mastfoot {
-  color: rgba(255, 255, 255, .5);
-}
+        .container.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
 
-.container {
-/*   visibility: hidden; */
-}
+        .card-face {
+            background-color: rgba(0, 0, 34, 0.85);
+            border-radius: 16px;
+            box-shadow: 0 0 10px #3d005c, 0 0 20px #000022;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            border: 1px solid #000022;
+            position: relative;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            width: 100%;
+            min-height: 600px;
+        }
 
-#reveal-effect {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-}
+        .card-front {
+            position: absolute;
+            width: 100%;
+            z-index: 2;
+        }
 
-body {
-  background: #fff;
-}
+        .card-back {
+            position: absolute;
+            width: 100%;
+            transform: rotateY(180deg);
+        }
 
-body.loaded {
-  background-color: #333333;
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-}
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-body.loaded .container {
-  visibility: visible;
-}
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-body.loaded #reveal-effect {
-  opacity: 1;
-}
-
-body.revealed #reveal-effect {
-  display: none;
-}
-
-
-body {
-  background: linear-gradient(to right, #000022, #561675);
-  background-size: 200% 100%;
-  animation: gradientShift 10s ease infinite;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  color: #e0e0e0;
-  position: relative;
-}
-
-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-      repeating-linear-gradient(to bottom, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px),
-      repeating-linear-gradient(to right, transparent 0px, transparent 90px, rgba(255, 255, 255, 0.05) 90px, rgba(255, 255, 255, 0.05) 91px);
-  pointer-events: none;
-}
-
-
-.container {
-  max-width: 600px;
-  width: 100%;
-  background-color: rgba(0, 0, 34, 0.85);
-  border-radius: 16px;
-  box-shadow: 0 0 10px #3d005c, 0 0 20px #000022;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  border: 1px solid #000022;
-  position: relative;
-}
-
-
-h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text-color);
-  text-align: center;
-  margin-bottom: 1rem;
-  display: inline;
+        h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e0e0e0;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    padding-right: 120px; /* Make space for the button */
+    padding-left: 120px; /* Balance the spacing */
 }
 
 .subtitle {
-  text-align: center;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
+    text-align: center;
+    color: #a0a0a0;
+    margin-bottom: 1rem;
+    padding-right: 120px; /* Make space for the button */
+    padding-left: 120px; /* Balance the spacing */
 }
 
-label {
-  font-weight: 500;
-  display: block;
-  margin-bottom: 0.5rem;
+        .label-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+        }
+
+        .info-icon {
+            cursor: pointer;
+            color: #6366f1;
+            font-size: 1rem;
+            position: relative;
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            width: 250px;
+            background-color: rgba(20, 20, 50, 0.95);
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #6366f1;
+            font-weight: normal;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #6366f1 transparent transparent transparent;
+        }
+
+        .info-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        input, select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.2s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000022;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .mode-switch {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .mode-button {
+            width: 49%;
+            background-color: rgba(99, 102, 241, 0.3);
+            color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 0;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-button.active {
+            background-color: var(--primary-color);
+        }
+
+        .option-row {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .option-col {
+            flex: 1;
+        }
+
+        #qrcode, #paymentQrcode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            min-height: 200px;
+        }
+
+        #qrcode canvas, #paymentQrcode canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            background-color: var(--success-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .download-btn:hover {
+            background-color: #0ca678;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-message, .error-message {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .success-message {
+            color: var(--success-color);
+        }
+
+        .error-message {
+            color: #ef4444;
+        }
+
+        .default-logo {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-preview {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .logo-preview img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .logo-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-container {
+            margin-top: 0.5rem;
+        }
+
+        .slider {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .flip-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: rgba(99, 102, 241, 0.6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    z-index: 10;
+    width: auto;
+    height: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.flip-button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
 }
 
-input, select {
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-  transition: all 0.2s ease;
-}
+        .payment-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
 
-input:focus, select:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-}
+        .payment-icon {
+            font-size: 1.5rem;
+        }
 
-button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 100%;
-}
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --card-bg: #1f2937;
+                --text-color: #f9fafb;
+                --text-secondary: #d1d5db;
+                --border-color: #374151;
+            }
+        }
 
-button:hover {
-  background-color: var(--primary-hover);
-}
+        @media (max-width: 640px) {
+            .card-face {
+                padding: 1.5rem;
+            }
 
-.option-row {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.option-col {
-  flex: 1;
-}
-
-#qrcode {
-  /* background-color: white; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 1.5rem 0;
-  min-height: 200px;
-}
-
-#qrcode canvas {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-
-.download-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  margin-top: 1.5rem;
-  background-color: var(--success-color);
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.download-btn:hover {
-  background-color: #0ca678;
-}
-
-.hidden {
-  display: none;
-}
-
-.success-message, .error-message {
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
-.success-message {
-  color: var(--success-color);
-}
-
-.error-message {
-  color: #ef4444;
-}
-
-/* Default logo preview */
-.default-logo {
-  margin-top: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.logo-preview {
-  width: 50px;
-  height: 50px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background-color: #ffffff;
-}
-
-.logo-preview img {
-  max-width: 80%;
-  max-height: 80%;
-}
-
-.logo-info {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  :root {
-      --bg-color: #111827;
-      --card-bg: #1f2937;
-      --text-color: #f9fafb;
-      --text-secondary: #d1d5db;
-      --border-color: #374151;
-  }
-}
-
-/* Responsive design */
-@media (max-width: 640px) {
-  .container {
-      padding: 1.5rem;
-  }
-
-  .option-row {
-      flex-direction: column;
-      gap: 0.5rem;
-  }
-}
-
-@keyframes spin {
-  from {
-      transform: rotate(0deg);
-  }
-  to {
-      transform: rotate(360deg);
-  }
-}
-
-
-
-    </style>
-
-</head>
-<body class="text-center">
-    <!-- <div id="page"> -->
-      <div class="container">
-        <span class="custom-spin"></span>
-        <h1>QR Code Generator</h1>
-        <p class="subtitle">Branded QR codes</p>
-
-        <div class="input-group">
-            <label for="data">Enter URL or Text:</label>
-            <input type="text" id="data" placeholder="https://glizch.in or any text" />
-        </div>
-
-        <div class="option-row">
-            <div class="option-col">
-                <label for="size">Size:</label>
-                <select id="size">
-                    <option value="150">Small (150×150)</option>
-                    <option value="250" selected>Medium (250×250)</option>
-                    <option value="350">Large (350×350)</option>
-                </select>
-            </div>
+            .option-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
             
+            .tooltip {
+                width: 200px;
+                margin-left: -100px;
+            }
+        }
+
+        /* Responsive adjustments */
+@media (max-width: 640px) {
+    .flip-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+        top: 0.8rem;
+        right: 0.8rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        padding-right: 90px;
+        padding-left: 90px;
+    }
+    
+    .subtitle {
+        padding-right: 90px;
+        padding-left: 90px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .flip-button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+    }
+    
+    h1 {
+        font-size: 1.3rem;
+        padding-right: 70px;
+        padding-left: 70px;
+    }
+    
+    .subtitle {
+        padding-right: 70px;
+        padding-left: 70px;
+        font-size: 0.85rem;
+    }
+    
+    .card-face {
+        padding: 1.2rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="card-inner">
+            <!-- Front side - Regular QR Code -->
+            <div class="card-face card-front">
+                <button class="flip-button" onclick="flipCard()">Payment QR</button>
+                <h1>QR Code Generator</h1>
+                <p class="subtitle">Create your own QR codes For FREE!</p>
+
+                <div class="input-group">
+                    <div class="label-container">
+                        <label for="data">Paste Link or Text:</label>
+                        <div class="info-icon">?
+                            <span class="tooltip">Enter any website URL, plain text, contact information, or any data you want to encode in the QR code. For URLs, include the full address (e.g., https://glizch.in).</span>
+                        </div>
+                    </div>
+                    <input type="text" id="data" placeholder="https://glizch.in or any text" />
+                </div>
+
+                <div class="option-row">
+                    <div class="option-col">
+                        <div class="label-container">
+                            <label for="size">Size:</label>
+                            <div class="info-icon">?
+                                <span class="tooltip">Select the pixel dimensions of your QR code. Larger sizes are better for printing or when the code contains more information.</span>
+                            </div>
+                        </div>
+                        <select id="size">
+                            <option value="150">Small (150×150)</option>
+                            <option value="250" selected>Medium (250×250)</option>
+                            <option value="350">Large (350×350)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="label-container" style="justify-content: center;">
+                    <!-- <b>Error Correction By default is Set to <span style="font-size: 1.8rem; font-weight: 700;">30%</span></b> -->
+                    <!-- <div class="info-icon">?
+                        <span class="tooltip">Error correction allows QR codes to be readable even when partially damaged or obscured. The 30% level (High) provides the best protection but may increase code density.</span>
+                    </div> -->
+                </div>
+                <button onclick="generateQRCode()">Generate QR Code</button>
+
+                <div id="qrcode"></div>
+                <p id="errorMessage" class="error-message hidden"></p>
+
+                <button id="downloadBtn" class="download-btn hidden" onclick="downloadQRCode()">
+                    Download QR Code
+                </button>
+                <p id="successMessage" class="success-message hidden"></p>
+            </div>
+
+            <!-- Back side - Payment QR Code -->
+            <div class="card-face card-back">
+                <button class="flip-button" onclick="flipCard()">Regular QR</button>
+                <div class="payment-header">
+                    <span class="payment-icon">💰</span>
+                    <h1>UPI Payment QR Code</h1>
+                </div>
+                <p class="subtitle">Generates QR codes for UPI payments</p>
+
+                <div class="input-group">
+                    <div class="label-container">
+                        <label for="upiId">UPI ID:</label>
+                        <div class="info-icon">?
+                            <span class="tooltip">Enter your UPI ID in the format 'username@provider'. For example: 'yourname@upi', 'yourname@okicici', or 'yourname@paytm'.</span>
+                        </div>
+                    </div>
+                    <input type="text" id="upiId" placeholder="yourname@upi" />
+                </div>
+
+                <div class="input-group">
+                    <div class="label-container">
+                        <label for="payeeName">Payee Name:</label>
+                        <div class="info-icon">?
+                            <span class="tooltip">Enter the name that will appear on the payment request. This should be your name or your business name as registered with your UPI provider.</span>
+                        </div>
+                    </div>
+                    <input type="text" id="payeeName" placeholder="Your Name" />
+                </div>
+
+                <div class="option-row">
+                    <div class="option-col">
+                        <div class="label-container">
+                            <label for="amount">Amount (₹):</label>
+                            <div class="info-icon">?
+                                <span class="tooltip">Enter the amount to be paid in rupees. Leave blank if you want the payer to enter the amount themselves.</span>
+                            </div>
+                        </div>
+                        <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" />
+                    </div>
+                    <div class="option-col">
+                        <div class="label-container">
+                            <label for="paymentSize">Size:</label>
+                            <div class="info-icon">?
+                                <span class="tooltip">Select the pixel dimensions of your QR code. Larger sizes are better for printing or when the QR code will be scanned from a distance.</span>
+                            </div>
+                        </div>
+                        <select id="paymentSize">
+                            <option value="150">Small (150×150)</option>
+                            <option value="250" selected>Medium (250×250)</option>
+                            <option value="350">Large (350×350)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-container">
+                        <label for="transactionNote">Transaction Note (Optional):</label>
+                        <div class="info-icon">?
+                            <span class="tooltip">Add a description or note for the payment. This will be visible to the payer and can be used for reference (e.g., "Payment for services", "Invoice #123").</span>
+                        </div>
+                    </div>
+                    <input type="text" id="transactionNote" placeholder="Payment for..." />
+                </div>
+
+                <div class="input-group">
+                    <div class="label-container">
+                        <label for="merchantCode">Merchant Code (Optional):</label>
+                        <div class="info-icon">?
+                            <span class="tooltip">If you're a registered merchant, enter your merchant code here. This field is generally only used by businesses with official merchant accounts.</span>
+                        </div>
+                    </div>
+                    <input type="text" id="merchantCode" placeholder="Merchant code if applicable" />
+                </div>
+
+                <button onclick="generatePaymentQRCode()">Generate Payment QR Code</button>
+
+                <div id="paymentQrcode"></div>
+                <p id="paymentErrorMessage" class="error-message hidden"></p>
+
+                <button id="paymentDownloadBtn" class="download-btn hidden" onclick="downloadPaymentQRCode()">
+                    Download Payment QR Code
+                </button>
+                <p id="paymentSuccessMessage" class="success-message hidden"></p>
+            </div>
         </div>
-        <!-- <div class="option-col">
-            <label for="errorCorrectionLevel">Error Correction:</label>
-            <select id="errorCorrectionLevel">
-                <option value="L">Low (7%)</option>
-                <option value="M">Medium (15%)</option>
-                <option value="Q" selected>Quartile (25%)</option>
-                <option value="H">High (30%)</option>
-            </select>
-        </div> -->
-        <center><b>Error Correction By default is Set to  <h1> 30% </h1></b></center>
-        <button onclick="generateQRCode()">Generate QR Code</button>
-
-        <div id="qrcode"></div>
-        <p id="errorMessage" class="error-message hidden"></p>
-
-        <button id="downloadBtn" class="download-btn hidden" onclick="downloadQRCode()">
-            Download QR Code
-        </button>
-        <p id="successMessage" class="success-message hidden"></p>
     </div>
-      <canvas id="reveal-effect"></canvas>
 
-    <!-- QRCode.js for better logo support -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // Reference to elements
-        const qrcodeElement = document.getElementById("qrcode");
-        const downloadBtn = document.getElementById("downloadBtn");
-        const successMessage = document.getElementById("successMessage");
-        const errorMessage = document.getElementById("errorMessage");
-        const dataInput = document.getElementById("data");
-        const sizeSelect = document.getElementById("size");
-        const errorCorrectionSelect = document.getElementById("errorCorrectionLevel");
+       // Reference to elements - Regular QR
+const qrcodeElement = document.getElementById("qrcode");
+const downloadBtn = document.getElementById("downloadBtn");
+const successMessage = document.getElementById("successMessage");
+const errorMessage = document.getElementById("errorMessage");
+const dataInput = document.getElementById("data");
+const sizeSelect = document.getElementById("size");
 
-        // Store the QR code instance
-        let qrCode = null;
+// Reference to elements - Payment QR
+const paymentQrcodeElement = document.getElementById("paymentQrcode");
+const paymentDownloadBtn = document.getElementById("paymentDownloadBtn");
+const paymentSuccessMessage = document.getElementById("paymentSuccessMessage");
+const paymentErrorMessage = document.getElementById("paymentErrorMessage");
+const upiIdInput = document.getElementById("upiId");
+const payeeNameInput = document.getElementById("payeeName");
+const amountInput = document.getElementById("amount");
+const paymentSizeSelect = document.getElementById("paymentSize");
+const transactionNoteInput = document.getElementById("transactionNote");
+const merchantCodeInput = document.getElementById("merchantCode");
 
-        // Your logo image (static image)
-        const logoImage = new Image();
-        logoImage.src = './favicon.ico'; // Replace with your image path
+// QR code instances
+let qrCode = null;
+let paymentQrCode = null;
 
-        // Ensure the logo is fully loaded before generating the QR code
-        logoImage.onload = function() {
-            console.log("Logo loaded");
-        };
+// Your logo image (static image)
+const logoImage = new Image();
+logoImage.src = './favicon.ico'; // Replace with your image path
 
-        async function generateQRCode() {
+// Ensure the logo is fully loaded before generating the QR code
+logoImage.onload = function() {
+    console.log("Logo loaded");
+};
+
+// Function to generate regular QR code with logo
+async function generateQRCode() {
     const data = dataInput.value.trim();
     const size = parseInt(sizeSelect.value);
-    const errorCorrection = "H";
+    const backgroundRatio = parseInt(90) / 100; // Fixed at 90%
+    const errorCorrection = "H"; // High error correction (30%)
 
     // Hide previous messages
     successMessage.classList.add("hidden");
@@ -392,8 +662,7 @@ button:hover {
 
     // Validate input
     if (!data) {
-        errorMessage.textContent = "Please enter some data!";
-        errorMessage.classList.remove("hidden");
+        showError("Please enter URL or text to generate QR code");
         qrcodeElement.innerHTML = '';
         downloadBtn.classList.add("hidden");
         return;
@@ -401,7 +670,20 @@ button:hover {
 
     try {
         // Clear the previous QR code
-        qrcodeElement.innerHTML = '';  // Remove the previous QR code
+        qrcodeElement.innerHTML = '';
+
+        // Create a new canvas with white background first
+        const containerCanvas = document.createElement('canvas');
+        const containerSize = size;
+        containerCanvas.width = containerSize;
+        containerCanvas.height = containerSize;
+        
+        // Get the container canvas context
+        const containerCtx = containerCanvas.getContext('2d');
+        
+        // Fill the canvas with a white background
+        containerCtx.fillStyle = "#ffffff";
+        containerCtx.fillRect(0, 0, containerSize, containerSize);
 
         // Create QR code options
         const options = {
@@ -413,49 +695,175 @@ button:hover {
             correctLevel: QRCode.CorrectLevel[errorCorrection]
         };
 
-        // Create QR code
-        qrCode = new QRCode(qrcodeElement, options);
-
-        // Now wait until the canvas is available and the QR code has been fully rendered
-        const canvas = qrcodeElement.querySelector("canvas");
-
-        if (canvas) {
-            const ctx = canvas.getContext("2d");
-
-            // Step 1: Add logo to QR code
-            addLogoToQRCode(canvas, ctx, size);
-
-            // Step 2: Apply the white border to the canvas
-            const borderSize = 1; // Adjust this value to control the border size
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-
-            ctx.save();
-            ctx.lineWidth = borderSize;
-            ctx.strokeStyle = "white";
-            ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
-            ctx.restore();
-
-            // Show the download button and success message
-            downloadBtn.classList.remove("hidden");
-            successMessage.textContent = "QR code generated successfully!";
-            successMessage.classList.remove("hidden");
-        } else {
-            throw new Error("QR code canvas not found.");
-        }
+        // Create temporary div to hold the QR code
+        const tempDiv = document.createElement('div');
+        tempDiv.style.display = 'none';
+        document.body.appendChild(tempDiv);
+        
+        // Create QR code in temp div
+        qrCode = new QRCode(tempDiv, options);
+        
+        // Wait a moment for QR to render
+        setTimeout(() => {
+            // Get the QR canvas from temp div
+            const qrCanvas = tempDiv.querySelector('canvas');
+            
+            if (qrCanvas) {
+                // Calculate the size of the inner QR code based on ratio
+                const qrDisplaySize = size * backgroundRatio;
+                const offset = (size - qrDisplaySize) / 2;
+                
+                // Draw QR code on the container canvas (centered and scaled)
+                containerCtx.drawImage(qrCanvas, offset, offset, qrDisplaySize, qrDisplaySize);
+                
+                // Add logo
+                addLogoToQRCode(containerCanvas, containerCtx, qrDisplaySize, offset);
+                
+                // Clean up temp div
+                document.body.removeChild(tempDiv);
+                
+                // Display the final canvas
+                containerCanvas.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+                qrcodeElement.appendChild(containerCanvas);
+                
+                // Show the download button and success message
+                downloadBtn.classList.remove("hidden");
+                showSuccess("QR code generated successfully!");
+            } else {
+                throw new Error("QR code canvas not found.");
+            }
+        }, 100);
     } catch (error) {
-        errorMessage.textContent = `Error: ${error.message || "Failed to generate QR code"}`;
-        errorMessage.classList.remove("hidden");
+        showError(`Error: ${error.message || "Failed to generate QR code"}`);
         downloadBtn.classList.add("hidden");
         console.error(error);
     }
 }
 
-// Function to add logo to QR code (centering it)
-function addLogoToQRCode(canvas, ctx, size) {
-    const logoSize = size * 0.3; // 30% of the QR code size
-    const logoX = (size - logoSize) / 2;
-    const logoY = (size - logoSize) / 2;
+// Function to generate payment QR code with logo
+function generatePaymentQRCode() {
+    const upiId = upiIdInput.value.trim();
+    const payeeName = payeeNameInput.value.trim();
+    const amount = amountInput.value.trim();
+    const size = parseInt(paymentSizeSelect.value);
+    const transactionNote = transactionNoteInput.value.trim();
+    const merchantCode = merchantCodeInput.value.trim();
+    const backgroundRatio = parseInt(90) / 100; // Fixed at 90%
+    const errorCorrection = "H"; // High error correction (30%)
+    
+    // Hide previous messages
+    paymentSuccessMessage.classList.add("hidden");
+    paymentErrorMessage.classList.add("hidden");
+    
+    if (!upiId) {
+        showPaymentError("Please enter UPI ID");
+        paymentQrcodeElement.innerHTML = '';
+        paymentDownloadBtn.classList.add("hidden");
+        return;
+    }
+    
+    if (!payeeName) {
+        showPaymentError("Please enter Payee Name");
+        paymentQrcodeElement.innerHTML = '';
+        paymentDownloadBtn.classList.add("hidden");
+        return;
+    }
+    
+    // Construct UPI payment URL
+    let upiPaymentUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}`;
+    
+    if (amount) {
+        upiPaymentUrl += `&am=${encodeURIComponent(amount)}`;
+    }
+    
+    if (transactionNote) {
+        upiPaymentUrl += `&tn=${encodeURIComponent(transactionNote)}`;
+    }
+    
+    if (merchantCode) {
+        upiPaymentUrl += `&mc=${encodeURIComponent(merchantCode)}`;
+    }
+    
+    // Add currency - default to INR for UPI
+    upiPaymentUrl += "&cu=INR";
+    
+    try {
+        // Clear the previous QR code
+        paymentQrcodeElement.innerHTML = '';
+
+        // Create a new canvas with white background first
+        const containerCanvas = document.createElement('canvas');
+        const containerSize = size;
+        containerCanvas.width = containerSize;
+        containerCanvas.height = containerSize;
+        
+        // Get the container canvas context
+        const containerCtx = containerCanvas.getContext('2d');
+        
+        // Fill the canvas with a white background
+        containerCtx.fillStyle = "#ffffff";
+        containerCtx.fillRect(0, 0, containerSize, containerSize);
+
+        // Create QR code options
+        const options = {
+            text: upiPaymentUrl,
+            width: size,
+            height: size,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel[errorCorrection]
+        };
+
+        // Create temporary div to hold the QR code
+        const tempDiv = document.createElement('div');
+        tempDiv.style.display = 'none';
+        document.body.appendChild(tempDiv);
+        
+        // Create QR code in temp div
+        paymentQrCode = new QRCode(tempDiv, options);
+        
+        // Wait a moment for QR to render
+        setTimeout(() => {
+            // Get the QR canvas from temp div
+            const qrCanvas = tempDiv.querySelector('canvas');
+            
+            if (qrCanvas) {
+                // Calculate the size of the inner QR code based on ratio
+                const qrDisplaySize = size * backgroundRatio;
+                const offset = (size - qrDisplaySize) / 2;
+                
+                // Draw QR code on the container canvas (centered and scaled)
+                containerCtx.drawImage(qrCanvas, offset, offset, qrDisplaySize, qrDisplaySize);
+                
+                // Add logo
+                addLogoToQRCode(containerCanvas, containerCtx, qrDisplaySize, offset);
+                
+                // Clean up temp div
+                document.body.removeChild(tempDiv);
+                
+                // Display the final canvas
+                containerCanvas.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+                paymentQrcodeElement.appendChild(containerCanvas);
+                
+                // Show the download button and success message
+                paymentDownloadBtn.classList.remove("hidden");
+                showPaymentSuccess("Payment QR code generated successfully!");
+            } else {
+                throw new Error("QR code canvas not found.");
+            }
+        }, 100);
+    } catch (error) {
+        showPaymentError(`Error: ${error.message || "Failed to generate Payment QR code"}`);
+        paymentDownloadBtn.classList.add("hidden");
+        console.error(error);
+    }
+}
+
+// Function to add logo to QR code
+function addLogoToQRCode(canvas, ctx, qrDisplaySize, offset) {
+    const logoSize = qrDisplaySize * 0.3; // 30% of the QR code size
+    const logoX = (canvas.width - logoSize) / 2;
+    const logoY = (canvas.height - logoSize) / 2;
 
     // Create an image element for the logo
     const logoImage = new Image();
@@ -463,238 +871,166 @@ function addLogoToQRCode(canvas, ctx, size) {
 
     // Ensure the logo is loaded before adding it to the canvas
     logoImage.onload = function() {
-        // Draw the logo inside the center of the QR code
-        ctx.save(); // Save the current canvas state
+        // Create a rounded rectangle path for the logo's area
+        ctx.save();
         ctx.beginPath();
-
-        // Draw logo (ensure it doesn't get clipped)
+        
+        // Draw a white background behind the logo
+        const padding = 0; // Padding around the logo
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(logoX - padding, logoY - padding, logoSize + padding * 2, logoSize + padding * 2);
+        
+        // Draw logo
         ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-        ctx.restore(); // Restore the canvas state after drawing the logo
+        ctx.restore();
     };
 }
 
-
-        // function addLogoToQRCode() {
-        //     const canvas = qrcodeElement.querySelector("canvas");
-        //     if (!canvas || !logoImage) return;
-    
-        //     const ctx = canvas.getContext("2d");
-        //     const size = parseInt(sizeSelect.value);
-        //     const logoSize = size * 0.3; // 30% of the QR code size
-        //     const logoX = (size - logoSize) / 2;
-        //     const logoY = (size - logoSize) / 2;
-    
-        //     // Create a rounded rectangle path for the logo's area
-        //     ctx.save();
-        //     ctx.beginPath();
-        //     // ctx.arc(logoX + logoSize / 2, logoY + logoSize / 2, logoSize / 2, 0, Math.PI * 2, false);//circle
-        //     ctx.clip();  // Set the clipping region to the rounded area
-
-        //     // Draw the logo inside the rounded clip region
-        //     ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-        //     ctx.restore();  // Restore the original state of the canvas
-        // }
-
-
-        function addLogoToQRCode() {
+// Function to download regular QR code
+function downloadQRCode() {
     const canvas = qrcodeElement.querySelector("canvas");
-    if (!canvas || !logoImage) return;
+    if (!canvas) return;
     
-    const ctx = canvas.getContext("2d");
-    const size = parseInt(sizeSelect.value);
-    const logoSize = size * 0.3; // 20% of the QR code size
-    const logoX = (size - logoSize) / 2;
-    const logoY = (size - logoSize) / 2;
-
-    // Set shadow properties
-    ctx.shadowColor = 'rgba(0, 0, 0, 1)'; // Shadow color (black with opacity)
-    ctx.shadowBlur = 200; // Blur effect for the shadow
-    ctx.shadowOffsetX = 4; // Horizontal offset of the shadow
-    ctx.shadowOffsetY = 4; // Vertical offset of the shadow
-
-    // Draw a rounded rectangle for the logo area
-    const borderRadius = 12; // Change this value to adjust the roundness
-
-    ctx.save(); // Save the current state
-
-    // Rounded rectangle path
-    ctx.beginPath();
-    ctx.moveTo(logoX + borderRadius, logoY); // Start at top-left corner with rounded edge
-    ctx.lineTo(logoX + logoSize - borderRadius, logoY); // Top-right
-    ctx.arcTo(logoX + logoSize, logoY, logoX + logoSize, logoY + logoSize, borderRadius); // Top-right corner
-    ctx.lineTo(logoX + logoSize, logoY + logoSize - borderRadius); // Bottom-right
-    ctx.arcTo(logoX + logoSize, logoY + logoSize, logoX + logoSize - borderRadius, logoY + logoSize, borderRadius); // Bottom-right corner
-    ctx.lineTo(logoX + borderRadius, logoY + logoSize); // Bottom-left
-    ctx.arcTo(logoX, logoY + logoSize, logoX, logoY + logoSize - borderRadius, borderRadius); // Bottom-left corner
-    ctx.lineTo(logoX, logoY + borderRadius); // Top-left
-    ctx.arcTo(logoX, logoY, logoX + borderRadius, logoY, borderRadius); // Top-left corner
-    ctx.closePath();
-    
-    // Clip to the rounded rectangle area
-    ctx.clip();
-
-    // Draw the logo inside the rounded rectangle area
-    ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-    
-    ctx.restore(); // Restore the original state of the canvas
-}
-
-
-        function downloadQRCode() {
-            const canvas = qrcodeElement.querySelector("canvas");
-            if (!canvas) return;
-            
-            try {
-                // Create a temporary link for downloading
-                const link = document.createElement("a");
-                link.download = "qrcode.png";
-                
-                // Get data URL from canvas
-                const dataUrl = canvas.toDataURL("image/png");
-                link.href = dataUrl;
-                
-                // Trigger download
-                link.click();
-                
-                // Show success message
-                successMessage.textContent = "QR code downloaded!";
-                successMessage.classList.remove("hidden");
-            } catch (error) {
-                errorMessage.textContent = `Error downloading: ${error.message || "Failed to download QR code"}`;
-                errorMessage.classList.remove("hidden");
-                console.error(error);
-            }
-        }
-
-        // Initialize with a sample QR code
-        window.onload = function() {
-            dataInput.value = "https://Glizch.in";
-            generateQRCode();
-        };
-    
-    
-        let renderer, scene, camera, cameraCtrl;
-let width, height, cx, cy, wWidth, wHeight;
-const TMath = THREE.Math;
-
-let conf = {
-  color: 0xffffff,
-  objectWidth: 12,
-  objectThickness: 3,
-  ambientColor: 0x808080,
-  light1Color: 0xffffff,
-  shadow: false,
-  perspective: 75,
-  cameraZ: 75,
-};
-
-let objects = [];
-let geometry, material;
-let hMap, hMap0, nx, ny;
-
-init();
-
-function init() {
-  renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('reveal-effect'), antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-
-  camera = new THREE.PerspectiveCamera(conf.perspective, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = conf.cameraZ;
-
-  scene = new THREE.Scene();
-  geometry = new THREE.BoxGeometry(conf.objectWidth, conf.objectWidth, conf.objectThickness);
-
-  window.addEventListener('load', initScene);
-  // document.getElementById('trigger').addEventListener('click', initScene);
-
-  animate();
-};
-
-function initScene() {
-  onResize();
-  scene = new THREE.Scene();
-  initLights();
-  initObjects();
-}
-
-function initLights() {
-  scene.add(new THREE.AmbientLight(conf.ambientColor));
-  let light = new THREE.PointLight(0xffffff);
-  light.position.z = 100;
-  scene.add(light);
-}
-
-function initObjects() {
-  objects = [];
-  nx = Math.round(wWidth / conf.objectWidth) + 1;
-  ny = Math.round(wHeight / conf.objectWidth) + 1;
-  let mesh, x, y;
-  for (let i = 0; i < nx; i++) {
-    for (let j = 0; j < ny; j++) {
-      material = new THREE.MeshLambertMaterial({ color: conf.color, transparent: true, opacity: 1 });
-      mesh = new THREE.Mesh(geometry, material);
-      x = -wWidth / 2 + i * conf.objectWidth;
-      y = -wHeight / 2 + j * conf.objectWidth;
-      mesh.position.set(x, y, 0);
-      objects.push(mesh);
-      scene.add(mesh);
+    try {
+        // Create a temporary link for downloading
+        const link = document.createElement("a");
+        link.download = "qrcode.png";
+        
+        // Get data URL from canvas
+        const dataUrl = canvas.toDataURL("image/png");
+        link.href = dataUrl;
+        
+        // Trigger download
+        link.click();
+        
+        // Show success message
+        showSuccess("QR code downloaded successfully!");
+    } catch (error) {
+        showError(`Error downloading: ${error.message || "Failed to download QR code"}`);
+        console.error(error);
     }
-  }
-  document.body.classList.add('loaded');
-  startAnim();
 }
 
-function startAnim() {
-  document.body.classList.remove('revealed');
-  objects.forEach(mesh => {
-    mesh.rotation.set(0, 0, 0);
-    mesh.material.opacity = 1;
-    mesh.position.z = 0;
-    let delay = TMath.randFloat(1, 2);
-    let rx = TMath.randFloatSpread(2 * Math.PI);
-    let ry = TMath.randFloatSpread(2 * Math.PI);
-    let rz = TMath.randFloatSpread(2 * Math.PI);
-    TweenMax.to(mesh.rotation, 2, { x: rx, y: ry, z: rz, delay: delay });
-    TweenMax.to(mesh.position, 2, { z: 80, delay: delay + 0.5, ease: Power1.easeOut });
-    TweenMax.to(mesh.material, 2, { opacity: 0, delay: delay + 0.5 });
-  });
-  setTimeout(() => {
-    document.body.classList.add('revealed');
-  }, 4500);
+// Function to download payment QR code
+function downloadPaymentQRCode() {
+    const canvas = paymentQrcodeElement.querySelector("canvas");
+    if (!canvas) return;
+    
+    try {
+        // Create a temporary link for downloading
+        const link = document.createElement("a");
+        link.download = "payment_qrcode.png";
+        
+        // Get data URL from canvas
+        const dataUrl = canvas.toDataURL("image/png");
+        link.href = dataUrl;
+        
+        // Trigger download
+        link.click();
+        
+        // Show success message
+        showPaymentSuccess("Payment QR code downloaded successfully!");
+    } catch (error) {
+        showPaymentError(`Error downloading: ${error.message || "Failed to download Payment QR code"}`);
+        console.error(error);
+    }
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+// Function to flip card
+function flipCard() {
+    const container = document.getElementById("container");
+    container.classList.toggle("flipped");
+}
+
+// Helper functions
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.remove("hidden");
+    setTimeout(() => {
+        errorMessage.classList.add("hidden");
+    }, 3000);
+}
+
+function showSuccess(message) {
+    successMessage.textContent = message;
+    successMessage.classList.remove("hidden");
+    setTimeout(() => {
+        successMessage.classList.add("hidden");
+    }, 3000);
+}
+
+function showPaymentError(message) {
+    paymentErrorMessage.textContent = message;
+    paymentErrorMessage.classList.remove("hidden");
+    setTimeout(() => {
+        paymentErrorMessage.classList.add("hidden");
+    }, 3000);
+}
+
+function showPaymentSuccess(message) {
+    paymentSuccessMessage.textContent = message;
+    paymentSuccessMessage.classList.remove("hidden");
+    setTimeout(() => {
+        paymentSuccessMessage.classList.add("hidden");
+    }, 3000);
+}
+
+// Event listeners
+dataInput.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        generateQRCode();
+    }
+});
+
+upiIdInput.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        generatePaymentQRCode();
+    }
+});
+
+// Mobile optimization for tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const infoIcons = document.querySelectorAll('.info-icon');
+    
+    // For mobile devices, make tooltips toggle on click instead of hover
+    if (window.innerWidth <= 768) {
+        infoIcons.forEach(icon => {
+            icon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Hide all other tooltips first
+                document.querySelectorAll('.tooltip').forEach(tooltip => {
+                    tooltip.style.visibility = 'hidden';
+                    tooltip.style.opacity = '0';
+                });
+                
+                // Toggle the current tooltip
+                const tooltip = this.querySelector('.tooltip');
+                if (tooltip.style.visibility === 'visible') {
+                    tooltip.style.visibility = 'hidden';
+                    tooltip.style.opacity = '0';
+                } else {
+                    tooltip.style.visibility = 'visible';
+                    tooltip.style.opacity = '1';
+                }
+            });
+        });
+        
+        // Close tooltips when clicking elsewhere
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.tooltip').forEach(tooltip => {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+            });
+        });
+    }
+});
+
+// Initialize with a sample QR code
+window.onload = function() {
+    dataInput.value = "https://Glizch.in";
+    generateQRCode();
 };
-
-function onResize() {
-  width = window.innerWidth; cx = width / 2;
-  height = window.innerHeight; cy = height / 2;
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-  renderer.setSize(width, height);
-
-  size = getRendererSize();
-  wWidth = size[0];
-  wHeight = size[1];
-}
-
-function getRendererSize() {
-  const cam = new THREE.PerspectiveCamera(conf.perspective, camera.aspect);
-  const vFOV = cam.fov * Math.PI / 180;
-  const height = 2 * Math.tan(vFOV / 2) * Math.abs(conf.cameraZ);
-  const width = height * cam.aspect;
-  return [width, height];
-}
-
-    </script>
-    <!-- </div> -->
-
-  
-
-
-
+</script>
 </body>
 </html>
