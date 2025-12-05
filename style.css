@@ -683,6 +683,10 @@ body {
         flex-direction: column;
         gap: 0.5rem;
     }
+
+   .header{
+      display : none;
+   }
     
     .header-content {
         flex-direction: column;
