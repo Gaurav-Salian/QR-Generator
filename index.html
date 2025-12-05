@@ -2,603 +2,346 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/style.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free QR Code Generator | QR.GLIZCH.IN</title>
-<meta name="description" content="Generate custom QR codes instantly for URLs, text, payments, UPI, WiFi, contacts and more. Free, fast and unlimited QR code generator at QR.GLIZCH.IN.">
-
-<link rel="canonical" href="https://qr.glizch.in/">
-
-<meta property="og:title" content="Free QR Code Generator - QR.GLIZCH.IN">
-<meta property="og:description" content="Create unlimited QR codes for links, text, UPI, WiFi and contact cards. No login required.">
-<meta property="og:url" content="https://qr.glizch.in/">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://qr.glizch.in/preview.png">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Free QR Code Generator">
-<meta name="twitter:description" content="Generate QR Codes instantly. Free and unlimited.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Free QR Code Generator for Google Maps & Event Locations or any links | No Expiry - Glizch</title>
+    <meta name="title" content="Free QR Code Generator for Google Maps & Event Locations | No Expiry - Glizch">
+    <meta name="description" content="Generate free QR codes for Google Maps locations, wedding venues, party addresses & UPI payments. Perfect for invitation cards! No expiry, no ads, completely free forever.">
+    <meta name="keywords" content="google maps qr code, location qr code, wedding invitation qr code, event location qr code, free qr code generator, upi qr code, qr code for invitations, venue qr code, no expiry qr code">
+    <meta name="author" content="Glizch">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://qr.glizch.in/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qr.glizch.in/">
+    <meta property="og:title" content="Free QR Code Generator for Google Maps & Event Locations - Glizch">
+    <meta property="og:description" content="Create free QR codes for event locations, wedding venues, and UPI payments. Perfect for invitation cards! No expiry, no ads.">
+    <meta property="og:image" content="https://qr.glizch.in/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://qr.glizch.in/">
+    <meta name="twitter:title" content="Free QR Code Generator for Google Maps & Events">
+    <meta name="twitter:description" content="Generate free QR codes for event locations, wedding venues, and payments. Perfect for invitation cards!">
+    <meta name="twitter:image" content="https://qr.glizch.in/twitter-image.jpg">
+    
+    <!-- Favicon -->
     <link rel="icon" href="./Qr-Gen/favicon.ico" type="image/x-icon">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "QR Code Generator",
-  "url": "https://qr.glizch.in/",
-  "applicationCategory": "Utility",
-  "operatingSystem": "Web",
-  "description": "Generate free QR codes for URLs, UPI, WiFi, text and more.",
-  "author": {
-    "@type": "Organization",
-    "name": "Glizch"
-  }
-}
-</script>
-
-
+    <link rel="apple-touch-icon" href="./Qr-Gen/apple-touch-icon.png">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Glizch QR Code Generator",
+        "url": "https://qr.glizch.in/",
+        "description": "Free QR code generator for Google Maps locations, event venues, and UPI payments. Perfect for wedding and event invitations with no expiry or ads.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Gaurav",
+            "url": "https://www.glizch.in"
+        }
+    }
+    </script>
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="card-inner">
-            <!-- Front side - Regular QR Code -->
-            <div class="card-face card-front">
-                <button class="flip-button" onclick="flipCard()">Payment QR</button>
-                <h1>QR Code Generator</h1>
-                <p class="subtitle">Create your own QR codes For FREE!</p>
-
-                <div class="input-group">
-                    <div class="label-container">
-                        <label for="data">Paste Link or Text:</label>
-                        <div class="info-icon">?
-                            <span class="tooltip">Enter any website URL, plain text, contact information, or any data you want to encode in the QR code. For URLs, include the full address (e.g., https://glizch.in).</span>
-                        </div>
-                    </div>
-                    <input type="text" id="data" placeholder="https://glizch.in or any text" />
-                </div>
-
-                <div class="option-row">
-                    <div class="option-col">
-                        <div class="label-container">
-                            <label for="size">Size:</label>
-                            <div class="info-icon">?
-                                <span class="tooltip">Select the pixel dimensions of your QR code. Larger sizes are better for printing or when the code contains more information.</span>
-                            </div>
-                        </div>
-                        <select id="size">
-                            <option value="150">Small (150×150)</option>
-                            <option value="250" selected>Medium (250×250)</option>
-                            <option value="350">Large (350×350)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="label-container" style="justify-content: center;">
-                    <!-- <b>Error Correction By default is Set to <span style="font-size: 1.8rem; font-weight: 700;">30%</span></b> -->
-                    <!-- <div class="info-icon">?
-                        <span class="tooltip">Error correction allows QR codes to be readable even when partially damaged or obscured. The 30% level (High) provides the best protection but may increase code density.</span>
-                    </div> -->
-                </div>
-                <button onclick="generateQRCode()">Generate QR Code</button>
-
-                <div id="qrcode"></div>
-                <p id="errorMessage" class="error-message hidden"></p>
-
-                <button id="downloadBtn" class="download-btn hidden" onclick="downloadQRCode()">
-                    Download QR Code
-                </button>
-                <p id="successMessage" class="success-message hidden"></p>
+    <!-- Header -->
+    <header class="header" id="header-content">
+        <div class="header-content">
+            <div class="logo">
+                <!-- <span class="logo-icon">⚡</span> -->
+                <img src="./Qr-Gen/favicon.ico" class="logo-icon" alt="Logo">
+                <span class="logo-text">Glizch QR</span>
             </div>
+            <nav class="nav">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#generator" class="nav-link primary-cta">Generate QR</a>
+            </nav>
+        </div>
+    </header>
 
-            <!-- Back side - Payment QR Code -->
-            <div class="card-face card-back">
-                <button class="flip-button" onclick="flipCard()">Regular QR</button>
-                <div class="payment-header">
-                    <span class="payment-icon">💰</span>
-                    <h1>UPI QR Code</h1>
-                </div>
-                <p class="subtitle">Generates QR codes for UPI payments</p>
-                <p id="paymentErrorMessage" class="error-message hidden"></p>
-
-                <div class="input-group">
-                    <div class="label-container">
-                        <label for="upiId">UPI ID:</label>
-                        <div class="info-icon">?
-                            <span class="tooltip">Enter your UPI ID in the format 'username@provider'. For example: 'yourname@upi', 'yourname@okicici', or 'yourname@paytm'.</span>
-                        </div>
-                    </div>
-                    <input type="text" id="upiId" placeholder="yourname@upi" />
-                </div>
-
-                <div class="input-group">
-                    <div class="label-container">
-                        <label for="payeeName">Payee (Your Name): </label>
-                        <div class="info-icon">?
-                            <span class="tooltip">Enter the name that will appear on the payment request. This should be your name or your business name as registered with your UPI provider. This is Optional</span>
-                        </div>
-                    </div>
-                    <input type="text" id="payeeName" placeholder="Your Name" />
-                </div>
-
-                <div class="option-row">
-                    <div class="option-col">
-                        <div class="label-container">
-                            <label for="amount">Amount ₹ (Optional):</label>
-                            <div class="info-icon">?
-                                <span class="tooltip">Enter a defined amount to be paid in rupees, That will show up during payment (user cannot change the amount during payment). Leave blank if you want the payer to enter the amount themselves.</span>
-                            </div>
-                        </div>
-                        <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" />
-                    </div>
-                    <div class="option-col">
-                        <div class="label-container">
-                            <label for="paymentSize">Size:</label>
-                            <div class="info-icon">?
-                                <span class="tooltip">Select the pixel dimensions of your QR code. Larger sizes are better for printing or when the QR code will be scanned from a distance.</span>
-                            </div>
-                        </div>
-                        <select id="paymentSize">
-                            <option value="150">Small (150×150)</option>
-                            <option value="250" selected>Medium (250×250)</option>
-                            <option value="350">Large (350×350)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <div class="label-container">
-                        <label for="transactionNote">Transaction Note (Optional):</label>
-                        <div class="info-icon">?
-                            <span class="tooltip">Add a description or note for the payment. This will be visible to the payer and can be used for reference and cannot be changed during Payment process (e.g., "Payment for services", "Invoice #123").</span>
-                        </div>
-                    </div>
-                    <input type="text" id="transactionNote" placeholder="Payment for..." />
-                </div>
-
-                <div class="input-group">
-                    <div class="label-container">
-                        <label for="merchantCode">Merchant Code (Optional):</label>
-                        <div class="info-icon">?
-                            <span class="tooltip">If you're a registered merchant, enter your merchant code here. This field is generally only used by businesses with official merchant accounts.</span>
-                        </div>
-                    </div>
-                    <input type="text" id="merchantCode" placeholder="Merchant code if applicable" />
-                </div>
-
-                <button onclick="generatePaymentQRCode()">Generate Payment QR Code</button>
-
-                <div id="paymentQrcode"></div>
-                
-
-                <button id="paymentDownloadBtn" class="download-btn hidden" onclick="downloadPaymentQRCode()">
-                    Download Payment QR Code
-                </button>
-                <p id="paymentSuccessMessage" class="success-message hidden"></p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Free QR Code Generator</h1>
+            <p class="hero-subtitle">Create professional QR codes for locations, events, and payments — No expiry, no ads, completely free</p>
+            <div class="hero-badges">
+                <span class="badge">✓ No Expiry</span>
+                <span class="badge">✓ No Sign Up</span>
+                <span class="badge">✓ Instant Download</span>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Main Generator Section -->
+    <main id="generator" class="generator-section">
+        <div class="container">
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="location">
+                    <span class="tab-icon">📍</span>
+                    QR Generator
+                </button>
+                <button class="tab-btn" data-tab="payment">
+                    <span class="tab-icon">💳</span>
+                    Payment QR
+                </button>
+            </div>
+
+            <!-- Location QR Tab -->
+            <div class="tab-content active" id="location-tab">
+                <div class="generator-card">
+                    <div class="card-header">
+                        <h2>Generate QR Code</h2>
+                        <p>Perfect for wedding invitations, event venues, and business addresses</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data" class="label">
+                            <span>Paste any Link or URL</span>
+                            <span class="info-tooltip" data-tooltip="Open Google Maps → Share → Copy link. Example: https://maps.app.goo.gl/abc123">ℹ️</span>
+                        </label>
+                        <input type="text" id="data" class="input" placeholder="https://maps.app.goo.gl/your-location" />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="size" class="label">
+                                <span>QR Code Size</span>
+                                <span class="info-tooltip" data-tooltip="Small: Digital use | Medium: Invitation cards | Large: Posters & prints">ℹ️</span>
+                            </label>
+                            <select id="size" class="select">
+                                <option value="150">Small (150×150) - Digital</option>
+                                <option value="250" selected>Medium (250×250) - Cards</option>
+                                <option value="350">Large (350×350) - Print</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="generateQRCode()" class="btn btn-primary">
+                        <span class="btn-icon">✨</span>
+                        Generate QR Code
+                    </button>
+
+                    <div id="qrcode" class="qr-display"></div>
+                    <p id="errorMessage" class="message error hidden"></p>
+                    <p id="successMessage" class="message success hidden"></p>
+
+                    <button id="downloadBtn" class="btn btn-success hidden" onclick="downloadQRCode()">
+                        <span class="btn-icon">📥</span>
+                        Download QR Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Payment QR Tab -->
+            <div class="tab-content" id="payment-tab">
+                <div class="generator-card">
+                    <div class="card-header">
+                        <h2>Generate UPI Payment QR Code</h2>
+                        <p>Accept payments easily for weddings, events, and businesses</p>
+                    </div>
+
+                    <p id="paymentErrorMessage" class="message error hidden"></p>
+
+                    <div class="form-group">
+                        <label for="upiId" class="label">
+                            <span>UPI ID</span>
+                            <span class="info-tooltip" data-tooltip="Format: username@provider (e.g., yourname@paytm)">ℹ️</span>
+                        </label>
+                        <input type="text" id="upiId" class="input" placeholder="yourname@paytm" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="payeeName" class="label">
+                            <span>Payee Name (Optional)</span>
+                        </label>
+                        <input type="text" id="payeeName" class="input" placeholder="Your Name or Business Name" />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amount" class="label">
+                                <span>Amount ₹ (Optional)</span>
+                                <span class="info-tooltip" data-tooltip="Mention Amount if it is Fixed">ℹ️</span>
+                            </label>
+                            <input type="number" id="amount" class="input" placeholder="Leave blank for any amount" min="0" step="0.01" />
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentSize" class="label">
+                                <span>QR Code Size</span>
+                            </label>
+                            <select id="paymentSize" class="select">
+                                <option value="150">Small (150×150)</option>
+                                <option value="250" selected>Medium (250×250)</option>
+                                <option value="350">Large (350×350)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionNote" class="label">
+                            <span>Transaction Note (Optional)</span>
+                        </label>
+                        <input type="text" id="transactionNote" class="input" placeholder="e.g., Wedding Gift" />
+                    </div>
+
+                    <button onclick="generatePaymentQRCode()" class="btn btn-primary">
+                        <span class="btn-icon">✨</span>
+                        Generate Payment QR
+                    </button>
+
+                    <div id="paymentQrcode" class="qr-display"></div>
+                    <p id="paymentSuccessMessage" class="message success hidden"></p>
+
+                    <button id="paymentDownloadBtn" class="btn btn-success hidden" onclick="downloadPaymentQRCode()">
+                        <span class="btn-icon">📥</span>
+                        Download Payment QR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Glizch QR?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">♾️</div>
+                    <h3>No Expiry</h3>
+                    <p>Your QR codes work forever. No time limits, no restrictions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚫</div>
+                    <h3>No Ads</h3>
+                    <p>Clean, professional QR codes without any advertisements.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💯</div>
+                    <h3>100% Free</h3>
+                    <p>No hidden charges. Free forever, no premium plans.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Generation</h3>
+                    <p>Generate and download QR codes in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Custom Logo</h3>
+                    <p>QR codes with your brand logo embedded automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Works perfectly on all devices and screen sizes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Enter Details</h3>
+                    <p>Paste your Google Maps link or enter UPI details</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Generate QR</h3>
+                    <p>Click generate and your QR code appears instantly</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Download & Use</h3>
+                    <p>Download as PNG and use on cards, posters, or digital</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases-section">
+        <div class="container">
+            <h2 class="section-title">Perfect For</h2>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <span class="use-case-icon">💍</span>
+                    <h3>Wedding Venues</h3>
+                    <p>Help guests find your venue easily</p>
+                </div>
+                <div class="use-case-card">
+                    <span class="use-case-icon">🎉</span>
+                    <h3>Party Locations</h3>
+                    <p>Share party venue with QR codes</p>
+                </div>
+                <div class="use-case-card">
+                    <span class="use-case-icon">🏢</span>
+                    <h3>Business Address</h3>
+                    <p>Add to business cards and brochures</p>
+                </div>
+                <div class="use-case-card">
+                    <span class="use-case-icon">🎪</span>
+                    <h3>Event Venues</h3>
+                    <p>Perfect for conferences and meetups</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <h3>About Glizch QR</h3>
+                    <p>Born from a simple need — helping friends create QR codes for their invitation cards without paying for premium services or dealing with annoying ads that expire.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="#generator">Generate QR</a>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Connect</h4>
+                    <p>Made with ❤️ by Gaurav</p>
+                    <p>Celebrating without barriers</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <!-- <p>© 2024 Glizch. All rights reserved. Free forever.</p> -->
+                <p>© <span id="currentYear"></span> Glizch. All rights reserved. Free forever.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script>
-       // Reference to elements - Regular QR
-const qrcodeElement = document.getElementById("qrcode");
-const downloadBtn = document.getElementById("downloadBtn");
-const successMessage = document.getElementById("successMessage");
-const errorMessage = document.getElementById("errorMessage");
-const dataInput = document.getElementById("data");
-const sizeSelect = document.getElementById("size");
-
-// Reference to elements - Payment QR
-const paymentQrcodeElement = document.getElementById("paymentQrcode");
-const paymentDownloadBtn = document.getElementById("paymentDownloadBtn");
-const paymentSuccessMessage = document.getElementById("paymentSuccessMessage");
-const paymentErrorMessage = document.getElementById("paymentErrorMessage");
-const upiIdInput = document.getElementById("upiId");
-const payeeNameInput = document.getElementById("payeeName");
-const amountInput = document.getElementById("amount");
-const paymentSizeSelect = document.getElementById("paymentSize");
-const transactionNoteInput = document.getElementById("transactionNote");
-const merchantCodeInput = document.getElementById("merchantCode");
-
-// QR code instances
-let qrCode = null;
-let paymentQrCode = null;
-
-// Your logo image (static image)
-const logoImage = new Image();
-logoImage.src = './favicon.ico'; // Replace with your image path
-
-// Ensure the logo is fully loaded before generating the QR code
-logoImage.onload = function() {
-    console.log("Logo loaded");
-};
-
-// Function to generate regular QR code with logo
-async function generateQRCode() {
-    const data = dataInput.value.trim();
-    const size = parseInt(sizeSelect.value);
-    const backgroundRatio = parseInt(90) / 100; // Fixed at 90%
-    const errorCorrection = "H"; // High error correction (30%)
-
-    // Hide previous messages
-    successMessage.classList.add("hidden");
-    errorMessage.classList.add("hidden");
-
-    // Validate input
-    if (!data) {
-        showError("Please enter URL or text to generate QR code");
-        qrcodeElement.innerHTML = '';
-        downloadBtn.classList.add("hidden");
-        return;
-    }
-
-    try {
-        // Clear the previous QR code
-        qrcodeElement.innerHTML = '';
-
-        // Create a new canvas with white background first
-        const containerCanvas = document.createElement('canvas');
-        const containerSize = size;
-        containerCanvas.width = containerSize;
-        containerCanvas.height = containerSize;
-        
-        // Get the container canvas context
-        const containerCtx = containerCanvas.getContext('2d');
-        
-        // Fill the canvas with a white background
-        containerCtx.fillStyle = "#ffffff";
-        containerCtx.fillRect(0, 0, containerSize, containerSize);
-
-        // Create QR code options
-        const options = {
-            text: data,
-            width: size,
-            height: size,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel[errorCorrection]
-        };
-
-        // Create temporary div to hold the QR code
-        const tempDiv = document.createElement('div');
-        tempDiv.style.display = 'none';
-        document.body.appendChild(tempDiv);
-        
-        // Create QR code in temp div
-        qrCode = new QRCode(tempDiv, options);
-        
-        // Wait a moment for QR to render
-        setTimeout(() => {
-            // Get the QR canvas from temp div
-            const qrCanvas = tempDiv.querySelector('canvas');
-            
-            if (qrCanvas) {
-                // Calculate the size of the inner QR code based on ratio
-                const qrDisplaySize = size * backgroundRatio;
-                const offset = (size - qrDisplaySize) / 2;
-                
-                // Draw QR code on the container canvas (centered and scaled)
-                containerCtx.drawImage(qrCanvas, offset, offset, qrDisplaySize, qrDisplaySize);
-                
-                // Add logo
-                addLogoToQRCode(containerCanvas, containerCtx, qrDisplaySize, offset);
-                
-                // Clean up temp div
-                document.body.removeChild(tempDiv);
-                
-                // Display the final canvas
-                containerCanvas.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-                qrcodeElement.appendChild(containerCanvas);
-                
-                // Show the download button and success message
-                downloadBtn.classList.remove("hidden");
-                showSuccess("QR code generated successfully!");
-            } else {
-                throw new Error("QR code canvas not found.");
-            }
-        }, 100);
-    } catch (error) {
-        showError(`Error: ${error.message || "Failed to generate QR code"}`);
-        downloadBtn.classList.add("hidden");
-        console.error(error);
-    }
-}
-
-// Function to generate payment QR code with logo
-function generatePaymentQRCode() {
-    const upiId = upiIdInput.value.trim();
-    const payeeName = payeeNameInput.value.trim();
-    const amount = amountInput.value.trim();
-    const size = parseInt(paymentSizeSelect.value);
-    const transactionNote = transactionNoteInput.value.trim();
-    const merchantCode = merchantCodeInput.value.trim();
-    const backgroundRatio = parseInt(90) / 100; // Fixed at 90%
-    const errorCorrection = "H"; // High error correction (30%)
-    
-    // Hide previous messages
-    paymentSuccessMessage.classList.add("hidden");
-    paymentErrorMessage.classList.add("hidden");
-    
-    if (!upiId) {
-        showPaymentError("Please enter UPI ID");
-        paymentQrcodeElement.innerHTML = '';
-        paymentDownloadBtn.classList.add("hidden");
-        return;
-    }
-    
-    // if (!payeeName) {
-    //     showPaymentError("Please enter Payee Name");
-    //     paymentQrcodeElement.innerHTML = '';
-    //     paymentDownloadBtn.classList.add("hidden");
-    //     return;
-    // }
-    
-    // Construct UPI payment URL
-    let upiPaymentUrl = `upi://pay?pa=${encodeURIComponent(upiId)}`;
-
-    if (payeeName) {
-        upiPaymentUrl += `&pn=${encodeURIComponent(payeeName)}`;
-    }
-    
-    if (amount) {
-        upiPaymentUrl += `&am=${encodeURIComponent(amount)}`;
-    }
-    
-    if (transactionNote) {
-        upiPaymentUrl += `&tn=${encodeURIComponent(transactionNote)}`;
-    }
-    
-    if (merchantCode) {
-        upiPaymentUrl += `&mc=${encodeURIComponent(merchantCode)}`;
-    }
-    
-    // Add currency - default to INR for UPI
-    upiPaymentUrl += "&cu=INR";
-    
-    try {
-        // Clear the previous QR code
-        paymentQrcodeElement.innerHTML = '';
-
-        // Create a new canvas with white background first
-        const containerCanvas = document.createElement('canvas');
-        const containerSize = size;
-        containerCanvas.width = containerSize;
-        containerCanvas.height = containerSize;
-        
-        // Get the container canvas context
-        const containerCtx = containerCanvas.getContext('2d');
-        
-        // Fill the canvas with a white background
-        containerCtx.fillStyle = "#ffffff";
-        containerCtx.fillRect(0, 0, containerSize, containerSize);
-
-        // Create QR code options
-        const options = {
-            text: upiPaymentUrl,
-            width: size,
-            height: size,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel[errorCorrection]
-        };
-
-        // Create temporary div to hold the QR code
-        const tempDiv = document.createElement('div');
-        tempDiv.style.display = 'none';
-        document.body.appendChild(tempDiv);
-        
-        // Create QR code in temp div
-        paymentQrCode = new QRCode(tempDiv, options);
-        
-        // Wait a moment for QR to render
-        setTimeout(() => {
-            // Get the QR canvas from temp div
-            const qrCanvas = tempDiv.querySelector('canvas');
-            
-            if (qrCanvas) {
-                // Calculate the size of the inner QR code based on ratio
-                const qrDisplaySize = size * backgroundRatio;
-                const offset = (size - qrDisplaySize) / 2;
-                
-                // Draw QR code on the container canvas (centered and scaled)
-                containerCtx.drawImage(qrCanvas, offset, offset, qrDisplaySize, qrDisplaySize);
-                
-                // Add logo
-                addLogoToQRCode(containerCanvas, containerCtx, qrDisplaySize, offset);
-                
-                // Clean up temp div
-                document.body.removeChild(tempDiv);
-                
-                // Display the final canvas
-                containerCanvas.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-                paymentQrcodeElement.appendChild(containerCanvas);
-                
-                // Show the download button and success message
-                paymentDownloadBtn.classList.remove("hidden");
-                showPaymentSuccess("Payment QR code generated successfully!");
-            } else {
-                throw new Error("QR code canvas not found.");
-            }
-        }, 100);
-    } catch (error) {
-        showPaymentError(`Error: ${error.message || "Failed to generate Payment QR code"}`);
-        paymentDownloadBtn.classList.add("hidden");
-        console.error(error);
-    }
-}
-
-// Function to add logo to QR code
-function addLogoToQRCode(canvas, ctx, qrDisplaySize, offset) {
-    const logoSize = qrDisplaySize * 0.3; // 30% of the QR code size
-    const logoX = (canvas.width - logoSize) / 2;
-    const logoY = (canvas.height - logoSize) / 2;
-
-    // Create an image element for the logo
-    const logoImage = new Image();
-    logoImage.src = './favicon.ico'; // Replace with your image path
-
-    // Ensure the logo is loaded before adding it to the canvas
-    logoImage.onload = function() {
-        // Create a rounded rectangle path for the logo's area
-        ctx.save();
-        ctx.beginPath();
-        
-        // Draw a white background behind the logo
-        const padding = 0; // Padding around the logo
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(logoX - padding, logoY - padding, logoSize + padding * 2, logoSize + padding * 2);
-        
-        // Draw logo
-        ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-        ctx.restore();
-    };
-}
-
-// Function to download regular QR code
-function downloadQRCode() {
-    const canvas = qrcodeElement.querySelector("canvas");
-    if (!canvas) return;
-    
-    try {
-        // Create a temporary link for downloading
-        const link = document.createElement("a");
-        link.download = "qrcode.png";
-        
-        // Get data URL from canvas
-        const dataUrl = canvas.toDataURL("image/png");
-        link.href = dataUrl;
-        
-        // Trigger download
-        link.click();
-        
-        // Show success message
-        showSuccess("QR code downloaded successfully!");
-    } catch (error) {
-        showError(`Error downloading: ${error.message || "Failed to download QR code"}`);
-        console.error(error);
-    }
-}
-
-// Function to download payment QR code
-function downloadPaymentQRCode() {
-    const canvas = paymentQrcodeElement.querySelector("canvas");
-    if (!canvas) return;
-    
-    try {
-        // Create a temporary link for downloading
-        const link = document.createElement("a");
-        link.download = "payment_qrcode.png";
-        
-        // Get data URL from canvas
-        const dataUrl = canvas.toDataURL("image/png");
-        link.href = dataUrl;
-        
-        // Trigger download
-        link.click();
-        
-        // Show success message
-        showPaymentSuccess("Payment QR code downloaded successfully!");
-    } catch (error) {
-        showPaymentError(`Error downloading: ${error.message || "Failed to download Payment QR code"}`);
-        console.error(error);
-    }
-}
-
-// Function to flip card
-function flipCard() {
-    const container = document.getElementById("container");
-    container.classList.toggle("flipped");
-}
-
-// Helper functions
-function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.classList.remove("hidden");
-    setTimeout(() => {
-        errorMessage.classList.add("hidden");
-    }, 3000);
-}
-
-function showSuccess(message) {
-    successMessage.textContent = message;
-    successMessage.classList.remove("hidden");
-    setTimeout(() => {
-        successMessage.classList.add("hidden");
-    }, 3000);
-}
-
-function showPaymentError(message) {
-    paymentErrorMessage.textContent = message;
-    paymentErrorMessage.classList.remove("hidden");
-    setTimeout(() => {
-        paymentErrorMessage.classList.add("hidden");
-    }, 3000);
-}
-
-function showPaymentSuccess(message) {
-    paymentSuccessMessage.textContent = message;
-    paymentSuccessMessage.classList.remove("hidden");
-    setTimeout(() => {
-        paymentSuccessMessage.classList.add("hidden");
-    }, 3000);
-}
-
-// Event listeners
-dataInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        generateQRCode();
-    }
-});
-
-upiIdInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        generatePaymentQRCode();
-    }
-});
-
-// Mobile optimization for tooltips
-document.addEventListener('DOMContentLoaded', function() {
-    const infoIcons = document.querySelectorAll('.info-icon');
-    
-    // For mobile devices, make tooltips toggle on click instead of hover
-    if (window.innerWidth <= 768) {
-        infoIcons.forEach(icon => {
-            icon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                
-                // Hide all other tooltips first
-                document.querySelectorAll('.tooltip').forEach(tooltip => {
-                    tooltip.style.visibility = 'hidden';
-                    tooltip.style.opacity = '0';
-                });
-                
-                // Toggle the current tooltip
-                const tooltip = this.querySelector('.tooltip');
-                if (tooltip.style.visibility === 'visible') {
-                    tooltip.style.visibility = 'hidden';
-                    tooltip.style.opacity = '0';
-                } else {
-                    tooltip.style.visibility = 'visible';
-                    tooltip.style.opacity = '1';
-                }
-            });
-        });
-        
-        // Close tooltips when clicking elsewhere
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.tooltip').forEach(tooltip => {
-                tooltip.style.visibility = 'hidden';
-                tooltip.style.opacity = '0';
-            });
-        });
-    }
-});
-
-// Initialize with a sample QR code
-window.onload = function() {
-    dataInput.value = "https://Glizch.in";
-    generateQRCode();
-};
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
